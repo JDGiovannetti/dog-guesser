@@ -14,11 +14,12 @@ app.use(express.static("public"));
 app.get("/", async (req,res) => {
     try {
         const response = await axios.get('https://dog.ceo/api/breeds/list/all');
-        let breeds = response.data.message;
-        let keys = Object.keys(breeds);
       } catch (error) {
         console.error(error);
       }
+
+      let breeds = response.data.message;
+      let keys = Object.keys(breeds);
     res.render("index.ejs");
 });
 app.listen(port, () => {

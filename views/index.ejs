@@ -7,12 +7,13 @@
     <title>Guess the Breed</title>
 </head>
 <body>
-    <img class = "dog-img" src="https://images.dog.ceo/breeds/sharpei/noel.jpg" alt="">
-    <form action="" method="POST" class = "dog-form">
-        <input type="submit" name="dog-1" id="" value = "Glorpenfiend1">
-        <input type="submit" name="dog-2" id="" value = "Glorpenfiend2">
-        <input type="submit" name="dog-3" id="" value = "Glorpenfiend3">
-        <input type="submit" name="dog-4" id="" value = "Glorpenfiend4">
+    <h1>What breed is this dog?</h1>
+    <img class = "dog-img" src=<%= dogimg %> alt="">
+    <form action="/answer" method="POST" class = "dog-form">
+        <input type="submit" name="answer" id="" value = <%= dogs[0][1] %>>
+        <input type="submit" name="answer" id="" value = <%= dogs[1][1] %>>
+        <input type="submit" name="answer" id="" value = <%= dogs[2][1] %>>
+        <input type="submit" name="answer" id="" value = <%= dogs[3][1] %>>
     </form>
     
 </body>

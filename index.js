@@ -17,10 +17,32 @@ function capFL(word) { // capitalizes the first letter of a word
   return word.charAt(0).toUpperCase() + word.slice(1);
 }
 
-function getRandom(len) {
+function getRandom(len) { // used for random indexes in lists
   return Math.floor(Math.random() * len);
 }
-function getFourRandomDogs(keylist, allbreeds) { 
+
+function fixWeirdBreeds(resdogs) { // unfortunately needed to manually fix bad dog names from API
+  let mymap = new Map([
+    ["Shepherd Australian", "Australian Shepherd"],
+    ["Staffordshire Bullterrier", "Staffordshire Bull Terrier"],
+    ["Australian Cattledog", "Australian Cattle Dog"],
+    ["Contondetulear", "Coton de Tulear"],
+    ["Lapphund Finnish", "Finnish Laphund"],
+    ["Germanshepherd", "German Shepherd"],
+    ["Mexicanhairless", "Xoloitzcuintle"],
+    ["Germanlonghair Pointer", "German Longhaired Pointer"],
+    ["Stbernard", "St. Bernard"],
+    ["Kerryblue Terrier", "Kerry Blue Terrier"],
+    ["Westhighland Terrier", "West Highland Terrier"],
+  ]);
+
+  for(let i = 0; i < resdogs.length; i++) {
+    if(mymap.has(resdogs[i][1])) {
+      resdogs[i][1] = mymap.get(resdogs[i][1]);
+    }
+  }
+}
+function getFourRandomDogs(keylist, allbreeds) { // uses API to find four random dogs to use one as answer and others as options
   let res = [];
   let dogs = [];
   let i = 0;
@@ -40,14 +62,19 @@ function getFourRandomDogs(keylist, allbreeds) {
         // if there are sub-breeds, choose a random one
       // appends subbreed to breed name (ex: appends "German" to "Shepherd")
       let randomSub = allbreeds[dog][getRandom(allbreeds[dog].length)];
-      res.push([`${dog}/${randomSub}`, capFL(randomSub) + " " + capFL(dog)]);
+      res.push([`${dog}/${randomSub}`, `${capFL(randomSub)} ${capFL(dog)}`]);
     }
     else {
       res.push([`${dog}`, capFL(dog)]);
     }
   }) 
+  fixWeirdBreeds(res);
   return res; // returns in form of [path, display name]
 }
+
+// global for use in post
+let ans = []; 
+let dogimg = "";
 
 app.get("/", async (req,res) => {
     try {
@@ -56,8 +83,8 @@ app.get("/", async (req,res) => {
         let keys = Object.keys(breeds); // list of all keys from breeds api
 
         let dogs = getFourRandomDogs(keys, breeds); // choose four for options
-        let ans = dogs[getRandom(dogs.length)]; // one dog chosen as answer
-        let dogimg = await axios.get(`https://dog.ceo/api/breed/${ans[0]}/images/random`);
+        ans = dogs[getRandom(dogs.length)]; // one dog chosen as answer
+        dogimg = await axios.get(`https://dog.ceo/api/breed/${ans[0]}/images/random`);
 
         res.render("index.ejs", {dogs: dogs, answer: ans, dogimg: dogimg.data.message});
       } catch (error) {
@@ -67,8 +94,11 @@ app.get("/", async (req,res) => {
 });
 
 app.post("/answer", (req,res) => {
-  console.log(req.body);
-  res.render("index.ejs");
+  let correct = true;
+  if(req.body.answer != ans[1]) {
+    correct = false;
+  }
+  res.render("index.ejs", {dogimg: dogimg.data.message, correct: correct, answer: ans});
 })
 app.listen(port, () => {
     console.log(`Server listening on port ${port}`);

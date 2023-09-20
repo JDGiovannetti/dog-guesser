@@ -4,17 +4,32 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="/styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
     <title>Guess the Breed</title>
 </head>
 <body>
-    <h1>What breed is this dog?</h1>
+    <div class="maindiv">
+        <h1>What breed is this dog?</h1>
     <img class = "dog-img" src=<%= dogimg %> alt="">
-    <form action="/answer" method="POST" class = "dog-form">
-        <input type="submit" name="answer" id="" value = <%= dogs[0][1] %>>
-        <input type="submit" name="answer" id="" value = <%= dogs[1][1] %>>
-        <input type="submit" name="answer" id="" value = <%= dogs[2][1] %>>
-        <input type="submit" name="answer" id="" value = <%= dogs[3][1] %>>
-    </form>
-    
+    <% if (locals.dogs) { %>
+        <form action="/answer" method="POST" class = "dog-form">
+            <input type="submit" name="answer" id="" value = "<%= dogs[0][1] %>">
+            <input type="submit" name="answer" id="" value = "<%= dogs[1][1] %>">
+            <input type="submit" name="answer" id="" value = "<%= dogs[2][1] %>">
+            <input type="submit" name="answer" id="" value = "<%= dogs[3][1] %>">
+        </form>
+    <% } else if(locals.correct){ %>
+        <h2 class = "cortxt">Correct!</h2>
+        <form action="/" method="GET" class = "dog-form">
+            <input type="submit" name="go-again" id="" value = "Go again?">
+        </form>
+
+    <% } else { %>
+        <h2 class = "inctxt">Incorrect! Correct answer: <%= answer[1] %>.</h2>
+        <form action="/" method="GET" class = "dog-form">
+            <input type="submit" name="go-again" id="" value = "Go again?">
+        </form>
+        <% } %>
+    </div>
 </body>
 </html>

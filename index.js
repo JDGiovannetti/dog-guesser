@@ -26,7 +26,7 @@ function fixWeirdBreeds(resdogs) { // unfortunately needed to manually fix bad d
     ["Shepherd Australian", "Australian Shepherd"],
     ["Staffordshire Bullterrier", "Staffordshire Bull Terrier"],
     ["Australian Cattledog", "Australian Cattle Dog"],
-    ["Contondetulear", "Coton de Tulear"],
+    ["Cotondetulear", "Coton de Tulear"],
     ["Lapphund Finnish", "Finnish Laphund"],
     ["Germanshepherd", "German Shepherd"],
     ["Mexicanhairless", "Xoloitzcuintle"],
